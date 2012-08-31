@@ -49,3 +49,4 @@ assert.equal(nanp.decodeVanity('1-800-JEFF-NOW', 'i-aaa-bbb-cccc'), '1-800-533-3
 assert.equal(nanp.decodeVanity('1-800-jeff-now', 'i-aaa-bbb-cccc'), '1-800-533-3669');
 assert.equal(nanp.decodeVanity('1-800-JEFF-NOW', '1-aaa-bbb-cccc'), '1-800-533-3669');
 assert.equal(nanp.decodeVanity('1-800-jeff-now', '1-aaa-bbb-cccc'), '1-800-533-3669');
+
