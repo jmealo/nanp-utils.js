@@ -9,18 +9,53 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
       "type": "file",
       "data": {
         "language": {
+          "nameMatchers": [".md"],
+          "commentsOnly": true,
+          "name": "Markdown"
+        },
+        "sourcePath": "/Users/jeffrey/Code/node-nanp-utils/README.md",
+        "projectPath": "README.md",
+        "targetPath": "index",
+        "firstHeader": {
+          "type": "heading",
+          "data": {
+            "level": 1,
+            "title": "node-nanp-utils",
+            "slug": "node-nanp-utils",
+            "isFileHeader": true
+          },
+          "depth": 1
+        },
+        "title": "node-nanp-utils"
+      },
+      "depth": 1,
+      "outline": []
+    }, {
+      "type": "file",
+      "data": {
+        "language": {
           "nameMatchers": [".js"],
           "pygmentsLexer": "javascript",
           "singleLineComment": ["//"],
           "name": "JavaScript"
         },
-        "sourcePath": "/Users/jeffrey/Code/node-nanp-utils/index.js",
-        "projectPath": "index.js",
-        "targetPath": "index",
-        "title": "index"
+        "sourcePath": "/Users/jeffrey/Code/node-nanp-utils/lib/nanp-utils.js",
+        "projectPath": "lib/nanp-utils.js",
+        "targetPath": "nanp-utils",
+        "title": "nanp-utils"
       },
       "depth": 1,
-      "outline": []
+      "outline": [
+        {
+          "type": "heading",
+          "data": {
+            "level": 2,
+            "title": "example: If the area code (123) is invalid we'd get {NPA: 123}",
+            "slug": "example-if-the-area-code-123-is-invalid-wed-get-npa-123"
+          },
+          "depth": 2
+        }
+      ]
     }
   ];
 

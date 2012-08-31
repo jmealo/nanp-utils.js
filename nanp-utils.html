@@ -1,0 +1,451 @@
+<!DOCTYPE html><html lang="en"><head><title>nanp-utils</title></head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"><meta name="groc-relative-root" content=""><meta name="groc-document-path" content="nanp-utils"><meta name="groc-project-path" content="lib/nanp-utils.js"><meta name="groc-github-url" content="https://github.com/jmealo/jmealo"><link rel="stylesheet" type="text/css" media="all" href="assets/style.css"><script type="text/javascript" src="assets/behavior.js"></script><body><div id="meta"><div class="file-path"><a href="https://github.com/jmealo/jmealo/blob/master/lib/nanp-utils.js">lib/nanp-utils.js</a></div></div><div id="document"><div class="segment"><div class="code"><div class="wrapper"><span class="kd">function</span> <span class="nx">isNumber</span><span class="p">(</span><span class="nx">number</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="o">!</span><span class="nb">isNaN</span><span class="p">(</span><span class="nb">parseFloat</span><span class="p">(</span><span class="nx">number</span><span class="p">))</span> <span class="o">&amp;&amp;</span> <span class="nb">isFinite</span><span class="p">(</span><span class="nx">number</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">isNPA</span><span class="p">(</span><span class="nx">area_code</span><span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>Check if an area code (xxx-558-1234) complies with the following constraints
+1st Digit: 2-9
+2nd Digit: 0-9
+3rd Digit: 0-9</p></div></div><div class="code"><div class="wrapper">    <span class="nx">area_code</span> <span class="o">+=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>cast area code as a string</p></div></div><div class="code"><div class="wrapper">    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">isNumber</span><span class="p">(</span><span class="nx">area_code</span><span class="p">)</span> <span class="o">||</span>
+       <span class="k">typeof</span> <span class="nx">area_code</span><span class="p">.</span><span class="nx">search</span> <span class="o">!==</span> <span class="s1">&#39;function&#39;</span> <span class="o">||</span>
+       <span class="nx">area_code</span><span class="p">.</span><span class="nx">trim</span><span class="p">().</span><span class="nx">length</span> <span class="o">!==</span> <span class="mi">3</span><span class="p">)</span> <span class="p">{</span>
+       <span class="k">return</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s2">&quot;isNPA expects argument &#39;area_code&#39; as 3-digit string or integer!&quot;</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nx">area_code</span><span class="p">.</span><span class="nx">search</span><span class="p">(</span><span class="sr">/([2-9][0-9][0-9])/</span><span class="p">)</span> <span class="o">!==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">isNXX</span><span class="p">(</span><span class="nx">exchange</span><span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>Check if a telephone exchange (610-xxx-1234) complies with the following constraints
+1st Digit: 2-9
+2nd Digit: 0-9
+3rd Digit: 0-9</p></div></div><div class="code"><div class="wrapper">    <span class="kd">var</span> <span class="nx">return_val</span> <span class="o">=</span> <span class="nx">isNPA</span><span class="p">(</span><span class="nx">exchange</span><span class="p">);</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>isNPA has identical functionality, no point in duplicating it</p></div></div><div class="code"><div class="wrapper">    <span class="k">return</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">return_val</span> <span class="o">===</span> <span class="s1">&#39;boolean&#39;</span><span class="p">)</span> <span class="o">?</span> <span class="nx">return_val</span> <span class="o">:</span>
+            <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s2">&quot;isNXX expects argument &#39;exchange&#39; as a 3-digit string or integer!&quot;</span><span class="p">);</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>return proper error message if isNPA fails</p></div></div><div class="code"><div class="wrapper"><span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">isSubscriber</span><span class="p">(</span><span class="nx">subscriber</span><span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>Check if a telephone subscriber (610-558-xxxx) complies with the following constraints
+1st-4th Digits: 0-9</p></div></div><div class="code"><div class="wrapper">    <span class="nx">subscriber</span> <span class="o">+=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>cast subscriber as a string</p></div></div><div class="code"><div class="wrapper">    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">isNumber</span><span class="p">(</span><span class="nx">subscriber</span><span class="p">)</span> <span class="o">||</span>
+       <span class="k">typeof</span> <span class="nx">subscriber</span><span class="p">.</span><span class="nx">search</span> <span class="o">!==</span> <span class="s1">&#39;function&#39;</span> <span class="o">||</span>
+       <span class="nx">subscriber</span><span class="p">.</span><span class="nx">trim</span><span class="p">().</span><span class="nx">length</span> <span class="o">!==</span> <span class="mi">4</span><span class="p">)</span> <span class="p">{</span>
+       <span class="k">return</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s2">&quot;isSubscriber expects argument &#39;subscriber&#39; as 4-digit string or integer!&quot;</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nx">subscriber</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="sr">/[\d]{4}/</span><span class="p">))</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">NPAtoState</span> <span class="p">(</span><span class="nx">area_code</span><span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>Return the 2 letter state assosciated with a 3-digit NPA area code
+If area code is NANP-wide (i.e. 800-888) or part of Canada/US Territory it returns false</p></div></div><div class="code"><div class="wrapper">    <span class="kd">var</span> <span class="nx">isAreaCode</span><span class="p">,</span> <span class="nx">NPA_state</span><span class="p">;</span>
+
+    <span class="nx">isAreaCode</span> <span class="o">=</span> <span class="nx">isNPA</span><span class="p">(</span><span class="nx">area_code</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nx">isAreaCode</span> <span class="o">===</span> <span class="kc">false</span> <span class="o">||</span> <span class="k">typeof</span> <span class="nx">isAreaCode</span> <span class="o">!==</span> <span class="s1">&#39;boolean&#39;</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s2">&quot;NPAtoState expects argument &#39;area_code&#39; to be a valid area code in the form of&quot;</span>
+                         <span class="o">+</span> <span class="s2">&quot;a 3-digit string or integer!&quot;</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="nx">NPA_state</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="mi">201</span> <span class="o">:</span> <span class="s1">&#39;NJ&#39;</span><span class="p">,</span>
+    <span class="mi">202</span> <span class="o">:</span> <span class="s1">&#39;DC&#39;</span><span class="p">,</span>
+    <span class="mi">203</span> <span class="o">:</span> <span class="s1">&#39;CT&#39;</span><span class="p">,</span>
+    <span class="mi">205</span> <span class="o">:</span> <span class="s1">&#39;AL&#39;</span><span class="p">,</span>
+    <span class="mi">206</span> <span class="o">:</span> <span class="s1">&#39;WA&#39;</span><span class="p">,</span>
+    <span class="mi">207</span> <span class="o">:</span> <span class="s1">&#39;ME&#39;</span><span class="p">,</span>
+    <span class="mi">208</span> <span class="o">:</span> <span class="s1">&#39;ID&#39;</span><span class="p">,</span>
+    <span class="mi">209</span> <span class="o">:</span> <span class="s1">&#39;CA&#39;</span><span class="p">,</span>
+    <span class="mi">210</span> <span class="o">:</span> <span class="s1">&#39;TX&#39;</span><span class="p">,</span>
+    <span class="mi">212</span> <span class="o">:</span> <span class="s1">&#39;NY&#39;</span><span class="p">,</span>
+    <span class="mi">213</span> <span class="o">:</span> <span class="s1">&#39;CA&#39;</span><span class="p">,</span>
+    <span class="mi">214</span> <span class="o">:</span> <span class="s1">&#39;TX&#39;</span><span class="p">,</span>
+    <span class="mi">215</span> <span class="o">:</span> <span class="s1">&#39;PA&#39;</span><span class="p">,</span>
+    <span class="mi">216</span> <span class="o">:</span> <span class="s1">&#39;OH&#39;</span><span class="p">,</span>
+    <span class="mi">217</span> <span class="o">:</span> <span class="s1">&#39;IL&#39;</span><span class="p">,</span>
+    <span class="mi">218</span> <span class="o">:</span> <span class="s1">&#39;MN&#39;</span><span class="p">,</span>
+    <span class="mi">219</span> <span class="o">:</span> <span class="s1">&#39;IN&#39;</span><span class="p">,</span>
+    <span class="mi">224</span> <span class="o">:</span> <span class="s1">&#39;IL&#39;</span><span class="p">,</span>
+    <span class="mi">225</span> <span class="o">:</span> <span class="s1">&#39;LA&#39;</span><span class="p">,</span>
+    <span class="mi">228</span> <span class="o">:</span> <span class="s1">&#39;MS&#39;</span><span class="p">,</span>
+    <span class="mi">229</span> <span class="o">:</span> <span class="s1">&#39;GA&#39;</span><span class="p">,</span>
+    <span class="mi">231</span> <span class="o">:</span> <span class="s1">&#39;MI&#39;</span><span class="p">,</span>
+    <span class="mi">234</span> <span class="o">:</span> <span class="s1">&#39;OH&#39;</span><span class="p">,</span>
+    <span class="mi">239</span> <span class="o">:</span> <span class="s1">&#39;FL&#39;</span><span class="p">,</span>
+    <span class="mi">240</span> <span class="o">:</span> <span class="s1">&#39;MD&#39;</span><span class="p">,</span>
+    <span class="mi">248</span> <span class="o">:</span> <span class="s1">&#39;MI&#39;</span><span class="p">,</span>
+    <span class="mi">251</span> <span class="o">:</span> <span class="s1">&#39;AL&#39;</span><span class="p">,</span>
+    <span class="mi">252</span> <span class="o">:</span> <span class="s1">&#39;NC&#39;</span><span class="p">,</span>
+    <span class="mi">253</span> <span class="o">:</span> <span class="s1">&#39;WA&#39;</span><span class="p">,</span>
+    <span class="mi">254</span> <span class="o">:</span> <span class="s1">&#39;TX&#39;</span><span class="p">,</span>
+    <span class="mi">256</span> <span class="o">:</span> <span class="s1">&#39;AL&#39;</span><span class="p">,</span>
+    <span class="mi">260</span> <span class="o">:</span> <span class="s1">&#39;IN&#39;</span><span class="p">,</span>
+    <span class="mi">262</span> <span class="o">:</span> <span class="s1">&#39;WI&#39;</span><span class="p">,</span>
+    <span class="mi">267</span> <span class="o">:</span> <span class="s1">&#39;PA&#39;</span><span class="p">,</span>
+    <span class="mi">269</span> <span class="o">:</span> <span class="s1">&#39;MI&#39;</span><span class="p">,</span>
+    <span class="mi">270</span> <span class="o">:</span> <span class="s1">&#39;KY&#39;</span><span class="p">,</span>
+    <span class="mi">276</span> <span class="o">:</span> <span class="s1">&#39;VA&#39;</span><span class="p">,</span>
+    <span class="mi">281</span> <span class="o">:</span> <span class="s1">&#39;TX&#39;</span><span class="p">,</span>
+    <span class="mi">301</span> <span class="o">:</span> <span class="s1">&#39;MD&#39;</span><span class="p">,</span>
+    <span class="mi">302</span> <span class="o">:</span> <span class="s1">&#39;DE&#39;</span><span class="p">,</span>
+    <span class="mi">303</span> <span class="o">:</span> <span class="s1">&#39;CO&#39;</span><span class="p">,</span>
+    <span class="mi">304</span> <span class="o">:</span> <span class="s1">&#39;WV&#39;</span><span class="p">,</span>
+    <span class="mi">305</span> <span class="o">:</span> <span class="s1">&#39;FL&#39;</span><span class="p">,</span>
+    <span class="mi">307</span> <span class="o">:</span> <span class="s1">&#39;WY&#39;</span><span class="p">,</span>
+    <span class="mi">308</span> <span class="o">:</span> <span class="s1">&#39;NE&#39;</span><span class="p">,</span>
+    <span class="mi">309</span> <span class="o">:</span> <span class="s1">&#39;IL&#39;</span><span class="p">,</span>
+    <span class="mi">310</span> <span class="o">:</span> <span class="s1">&#39;CA&#39;</span><span class="p">,</span>
+    <span class="mi">312</span> <span class="o">:</span> <span class="s1">&#39;IL&#39;</span><span class="p">,</span>
+    <span class="mi">313</span> <span class="o">:</span> <span class="s1">&#39;MI&#39;</span><span class="p">,</span>
+    <span class="mi">314</span> <span class="o">:</span> <span class="s1">&#39;MO&#39;</span><span class="p">,</span>
+    <span class="mi">315</span> <span class="o">:</span> <span class="s1">&#39;NY&#39;</span><span class="p">,</span>
+    <span class="mi">316</span> <span class="o">:</span> <span class="s1">&#39;KS&#39;</span><span class="p">,</span>
+    <span class="mi">317</span> <span class="o">:</span> <span class="s1">&#39;IN&#39;</span><span class="p">,</span>
+    <span class="mi">318</span> <span class="o">:</span> <span class="s1">&#39;LA&#39;</span><span class="p">,</span>
+    <span class="mi">319</span> <span class="o">:</span> <span class="s1">&#39;IA&#39;</span><span class="p">,</span>
+    <span class="mi">320</span> <span class="o">:</span> <span class="s1">&#39;MN&#39;</span><span class="p">,</span>
+    <span class="mi">321</span> <span class="o">:</span> <span class="s1">&#39;FL&#39;</span><span class="p">,</span>
+    <span class="mi">323</span> <span class="o">:</span> <span class="s1">&#39;CA&#39;</span><span class="p">,</span>
+    <span class="mi">325</span> <span class="o">:</span> <span class="s1">&#39;TX&#39;</span><span class="p">,</span>
+    <span class="mi">330</span> <span class="o">:</span> <span class="s1">&#39;OH&#39;</span><span class="p">,</span>
+    <span class="mi">331</span> <span class="o">:</span> <span class="s1">&#39;IL&#39;</span><span class="p">,</span>
+    <span class="mi">334</span> <span class="o">:</span> <span class="s1">&#39;AL&#39;</span><span class="p">,</span>
+    <span class="mi">336</span> <span class="o">:</span> <span class="s1">&#39;NC&#39;</span><span class="p">,</span>
+    <span class="mi">337</span> <span class="o">:</span> <span class="s1">&#39;LA&#39;</span><span class="p">,</span>
+    <span class="mi">339</span> <span class="o">:</span> <span class="s1">&#39;MA&#39;</span><span class="p">,</span>
+    <span class="mi">347</span> <span class="o">:</span> <span class="s1">&#39;NY&#39;</span><span class="p">,</span>
+    <span class="mi">351</span> <span class="o">:</span> <span class="s1">&#39;MA&#39;</span><span class="p">,</span>
+    <span class="mi">352</span> <span class="o">:</span> <span class="s1">&#39;FL&#39;</span><span class="p">,</span>
+    <span class="mi">360</span> <span class="o">:</span> <span class="s1">&#39;WA&#39;</span><span class="p">,</span>
+    <span class="mi">361</span> <span class="o">:</span> <span class="s1">&#39;TX&#39;</span><span class="p">,</span>
+    <span class="mi">385</span> <span class="o">:</span> <span class="s1">&#39;UT&#39;</span><span class="p">,</span>
+    <span class="mi">386</span> <span class="o">:</span> <span class="s1">&#39;FL&#39;</span><span class="p">,</span>
+    <span class="mi">401</span> <span class="o">:</span> <span class="s1">&#39;RI&#39;</span><span class="p">,</span>
+    <span class="mi">402</span> <span class="o">:</span> <span class="s1">&#39;NE&#39;</span><span class="p">,</span>
+    <span class="mi">404</span> <span class="o">:</span> <span class="s1">&#39;GA&#39;</span><span class="p">,</span>
+    <span class="mi">405</span> <span class="o">:</span> <span class="s1">&#39;OK&#39;</span><span class="p">,</span>
+    <span class="mi">406</span> <span class="o">:</span> <span class="s1">&#39;MT&#39;</span><span class="p">,</span>
+    <span class="mi">407</span> <span class="o">:</span> <span class="s1">&#39;FL&#39;</span><span class="p">,</span>
+    <span class="mi">408</span> <span class="o">:</span> <span class="s1">&#39;CA&#39;</span><span class="p">,</span>
+    <span class="mi">409</span> <span class="o">:</span> <span class="s1">&#39;TX&#39;</span><span class="p">,</span>
+    <span class="mi">410</span> <span class="o">:</span> <span class="s1">&#39;MD&#39;</span><span class="p">,</span>
+    <span class="mi">412</span> <span class="o">:</span> <span class="s1">&#39;PA&#39;</span><span class="p">,</span>
+    <span class="mi">413</span> <span class="o">:</span> <span class="s1">&#39;MA&#39;</span><span class="p">,</span>
+    <span class="mi">414</span> <span class="o">:</span> <span class="s1">&#39;WI&#39;</span><span class="p">,</span>
+    <span class="mi">415</span> <span class="o">:</span> <span class="s1">&#39;CA&#39;</span><span class="p">,</span>
+    <span class="mi">417</span> <span class="o">:</span> <span class="s1">&#39;MO&#39;</span><span class="p">,</span>
+    <span class="mi">419</span> <span class="o">:</span> <span class="s1">&#39;OH&#39;</span><span class="p">,</span>
+    <span class="mi">423</span> <span class="o">:</span> <span class="s1">&#39;TN&#39;</span><span class="p">,</span>
+    <span class="mi">424</span> <span class="o">:</span> <span class="s1">&#39;CA&#39;</span><span class="p">,</span>
+    <span class="mi">425</span> <span class="o">:</span> <span class="s1">&#39;WA&#39;</span><span class="p">,</span>
+    <span class="mi">430</span> <span class="o">:</span> <span class="s1">&#39;TX&#39;</span><span class="p">,</span>
+    <span class="mi">432</span> <span class="o">:</span> <span class="s1">&#39;TX&#39;</span><span class="p">,</span>
+    <span class="mi">434</span> <span class="o">:</span> <span class="s1">&#39;VA&#39;</span><span class="p">,</span>
+    <span class="mi">435</span> <span class="o">:</span> <span class="s1">&#39;UT&#39;</span><span class="p">,</span>
+    <span class="mi">440</span> <span class="o">:</span> <span class="s1">&#39;OH&#39;</span><span class="p">,</span>
+    <span class="mi">442</span> <span class="o">:</span> <span class="s1">&#39;CA&#39;</span><span class="p">,</span>
+    <span class="mi">443</span> <span class="o">:</span> <span class="s1">&#39;MD&#39;</span><span class="p">,</span>
+    <span class="mi">458</span> <span class="o">:</span> <span class="s1">&#39;OR&#39;</span><span class="p">,</span>
+    <span class="mi">469</span> <span class="o">:</span> <span class="s1">&#39;TX&#39;</span><span class="p">,</span>
+    <span class="mi">470</span> <span class="o">:</span> <span class="s1">&#39;GA&#39;</span><span class="p">,</span>
+    <span class="mi">475</span> <span class="o">:</span> <span class="s1">&#39;CT&#39;</span><span class="p">,</span>
+    <span class="mi">478</span> <span class="o">:</span> <span class="s1">&#39;GA&#39;</span><span class="p">,</span>
+    <span class="mi">479</span> <span class="o">:</span> <span class="s1">&#39;AR&#39;</span><span class="p">,</span>
+    <span class="mi">480</span> <span class="o">:</span> <span class="s1">&#39;AZ&#39;</span><span class="p">,</span>
+    <span class="mi">484</span> <span class="o">:</span> <span class="s1">&#39;PA&#39;</span><span class="p">,</span>
+    <span class="mi">501</span> <span class="o">:</span> <span class="s1">&#39;AR&#39;</span><span class="p">,</span>
+    <span class="mi">502</span> <span class="o">:</span> <span class="s1">&#39;KY&#39;</span><span class="p">,</span>
+    <span class="mi">503</span> <span class="o">:</span> <span class="s1">&#39;OR&#39;</span><span class="p">,</span>
+    <span class="mi">504</span> <span class="o">:</span> <span class="s1">&#39;LA&#39;</span><span class="p">,</span>
+    <span class="mi">505</span> <span class="o">:</span> <span class="s1">&#39;NM&#39;</span><span class="p">,</span>
+    <span class="mi">507</span> <span class="o">:</span> <span class="s1">&#39;MN&#39;</span><span class="p">,</span>
+    <span class="mi">508</span> <span class="o">:</span> <span class="s1">&#39;MA&#39;</span><span class="p">,</span>
+    <span class="mi">509</span> <span class="o">:</span> <span class="s1">&#39;WA&#39;</span><span class="p">,</span>
+    <span class="mi">510</span> <span class="o">:</span> <span class="s1">&#39;CA&#39;</span><span class="p">,</span>
+    <span class="mi">512</span> <span class="o">:</span> <span class="s1">&#39;TX&#39;</span><span class="p">,</span>
+    <span class="mi">513</span> <span class="o">:</span> <span class="s1">&#39;OH&#39;</span><span class="p">,</span>
+    <span class="mi">515</span> <span class="o">:</span> <span class="s1">&#39;IA&#39;</span><span class="p">,</span>
+    <span class="mi">516</span> <span class="o">:</span> <span class="s1">&#39;NY&#39;</span><span class="p">,</span>
+    <span class="mi">517</span> <span class="o">:</span> <span class="s1">&#39;MI&#39;</span><span class="p">,</span>
+    <span class="mi">518</span> <span class="o">:</span> <span class="s1">&#39;NY&#39;</span><span class="p">,</span>
+    <span class="mi">520</span> <span class="o">:</span> <span class="s1">&#39;AZ&#39;</span><span class="p">,</span>
+    <span class="mi">530</span> <span class="o">:</span> <span class="s1">&#39;CA&#39;</span><span class="p">,</span>
+    <span class="mi">534</span> <span class="o">:</span> <span class="s1">&#39;WI&#39;</span><span class="p">,</span>
+    <span class="mi">539</span> <span class="o">:</span> <span class="s1">&#39;OK&#39;</span><span class="p">,</span>
+    <span class="mi">540</span> <span class="o">:</span> <span class="s1">&#39;VA&#39;</span><span class="p">,</span>
+    <span class="mi">541</span> <span class="o">:</span> <span class="s1">&#39;OR&#39;</span><span class="p">,</span>
+    <span class="mi">551</span> <span class="o">:</span> <span class="s1">&#39;NJ&#39;</span><span class="p">,</span>
+    <span class="mi">559</span> <span class="o">:</span> <span class="s1">&#39;CA&#39;</span><span class="p">,</span>
+    <span class="mi">561</span> <span class="o">:</span> <span class="s1">&#39;FL&#39;</span><span class="p">,</span>
+    <span class="mi">562</span> <span class="o">:</span> <span class="s1">&#39;CA&#39;</span><span class="p">,</span>
+    <span class="mi">563</span> <span class="o">:</span> <span class="s1">&#39;IA&#39;</span><span class="p">,</span>
+    <span class="mi">567</span> <span class="o">:</span> <span class="s1">&#39;OH&#39;</span><span class="p">,</span>
+    <span class="mi">570</span> <span class="o">:</span> <span class="s1">&#39;PA&#39;</span><span class="p">,</span>
+    <span class="mi">571</span> <span class="o">:</span> <span class="s1">&#39;VA&#39;</span><span class="p">,</span>
+    <span class="mi">573</span> <span class="o">:</span> <span class="s1">&#39;MO&#39;</span><span class="p">,</span>
+    <span class="mi">574</span> <span class="o">:</span> <span class="s1">&#39;IN&#39;</span><span class="p">,</span>
+    <span class="mi">575</span> <span class="o">:</span> <span class="s1">&#39;NM&#39;</span><span class="p">,</span>
+    <span class="mi">580</span> <span class="o">:</span> <span class="s1">&#39;OK&#39;</span><span class="p">,</span>
+    <span class="mi">585</span> <span class="o">:</span> <span class="s1">&#39;NY&#39;</span><span class="p">,</span>
+    <span class="mi">586</span> <span class="o">:</span> <span class="s1">&#39;MI&#39;</span><span class="p">,</span>
+    <span class="mi">601</span> <span class="o">:</span> <span class="s1">&#39;MS&#39;</span><span class="p">,</span>
+    <span class="mi">602</span> <span class="o">:</span> <span class="s1">&#39;AZ&#39;</span><span class="p">,</span>
+    <span class="mi">603</span> <span class="o">:</span> <span class="s1">&#39;NH&#39;</span><span class="p">,</span>
+    <span class="mi">605</span> <span class="o">:</span> <span class="s1">&#39;SD&#39;</span><span class="p">,</span>
+    <span class="mi">606</span> <span class="o">:</span> <span class="s1">&#39;KY&#39;</span><span class="p">,</span>
+    <span class="mi">607</span> <span class="o">:</span> <span class="s1">&#39;NY&#39;</span><span class="p">,</span>
+    <span class="mi">608</span> <span class="o">:</span> <span class="s1">&#39;WI&#39;</span><span class="p">,</span>
+    <span class="mi">609</span> <span class="o">:</span> <span class="s1">&#39;NJ&#39;</span><span class="p">,</span>
+    <span class="mi">610</span> <span class="o">:</span> <span class="s1">&#39;PA&#39;</span><span class="p">,</span>
+    <span class="mi">612</span> <span class="o">:</span> <span class="s1">&#39;MN&#39;</span><span class="p">,</span>
+    <span class="mi">614</span> <span class="o">:</span> <span class="s1">&#39;OH&#39;</span><span class="p">,</span>
+    <span class="mi">615</span> <span class="o">:</span> <span class="s1">&#39;TN&#39;</span><span class="p">,</span>
+    <span class="mi">616</span> <span class="o">:</span> <span class="s1">&#39;MI&#39;</span><span class="p">,</span>
+    <span class="mi">617</span> <span class="o">:</span> <span class="s1">&#39;MA&#39;</span><span class="p">,</span>
+    <span class="mi">618</span> <span class="o">:</span> <span class="s1">&#39;IL&#39;</span><span class="p">,</span>
+    <span class="mi">619</span> <span class="o">:</span> <span class="s1">&#39;CA&#39;</span><span class="p">,</span>
+    <span class="mi">620</span> <span class="o">:</span> <span class="s1">&#39;KS&#39;</span><span class="p">,</span>
+    <span class="mi">623</span> <span class="o">:</span> <span class="s1">&#39;AZ&#39;</span><span class="p">,</span>
+    <span class="mi">626</span> <span class="o">:</span> <span class="s1">&#39;CA&#39;</span><span class="p">,</span>
+    <span class="mi">630</span> <span class="o">:</span> <span class="s1">&#39;IL&#39;</span><span class="p">,</span>
+    <span class="mi">631</span> <span class="o">:</span> <span class="s1">&#39;NY&#39;</span><span class="p">,</span>
+    <span class="mi">636</span> <span class="o">:</span> <span class="s1">&#39;MO&#39;</span><span class="p">,</span>
+    <span class="mi">641</span> <span class="o">:</span> <span class="s1">&#39;IA&#39;</span><span class="p">,</span>
+    <span class="mi">646</span> <span class="o">:</span> <span class="s1">&#39;NY&#39;</span><span class="p">,</span>
+    <span class="mi">650</span> <span class="o">:</span> <span class="s1">&#39;CA&#39;</span><span class="p">,</span>
+    <span class="mi">651</span> <span class="o">:</span> <span class="s1">&#39;MN&#39;</span><span class="p">,</span>
+    <span class="mi">657</span> <span class="o">:</span> <span class="s1">&#39;CA&#39;</span><span class="p">,</span>
+    <span class="mi">660</span> <span class="o">:</span> <span class="s1">&#39;MO&#39;</span><span class="p">,</span>
+    <span class="mi">661</span> <span class="o">:</span> <span class="s1">&#39;CA&#39;</span><span class="p">,</span>
+    <span class="mi">662</span> <span class="o">:</span> <span class="s1">&#39;MS&#39;</span><span class="p">,</span>
+    <span class="mi">667</span> <span class="o">:</span> <span class="s1">&#39;MD&#39;</span><span class="p">,</span>
+    <span class="mi">671</span> <span class="o">:</span> <span class="s1">&#39;GU&#39;</span><span class="p">,</span>
+    <span class="mi">678</span> <span class="o">:</span> <span class="s1">&#39;GA&#39;</span><span class="p">,</span>
+    <span class="mi">681</span> <span class="o">:</span> <span class="s1">&#39;WV&#39;</span><span class="p">,</span>
+    <span class="mi">682</span> <span class="o">:</span> <span class="s1">&#39;TX&#39;</span><span class="p">,</span>
+    <span class="mi">684</span> <span class="o">:</span> <span class="s1">&#39;AS&#39;</span><span class="p">,</span>
+    <span class="mi">701</span> <span class="o">:</span> <span class="s1">&#39;ND&#39;</span><span class="p">,</span>
+    <span class="mi">702</span> <span class="o">:</span> <span class="s1">&#39;NV&#39;</span><span class="p">,</span>
+    <span class="mi">703</span> <span class="o">:</span> <span class="s1">&#39;VA&#39;</span><span class="p">,</span>
+    <span class="mi">704</span> <span class="o">:</span> <span class="s1">&#39;NC&#39;</span><span class="p">,</span>
+    <span class="mi">706</span> <span class="o">:</span> <span class="s1">&#39;GA&#39;</span><span class="p">,</span>
+    <span class="mi">707</span> <span class="o">:</span> <span class="s1">&#39;CA&#39;</span><span class="p">,</span>
+    <span class="mi">708</span> <span class="o">:</span> <span class="s1">&#39;IL&#39;</span><span class="p">,</span>
+    <span class="mi">710</span> <span class="o">:</span> <span class="s1">&#39;US&#39;</span><span class="p">,</span>
+    <span class="mi">712</span> <span class="o">:</span> <span class="s1">&#39;IA&#39;</span><span class="p">,</span>
+    <span class="mi">713</span> <span class="o">:</span> <span class="s1">&#39;TX&#39;</span><span class="p">,</span>
+    <span class="mi">714</span> <span class="o">:</span> <span class="s1">&#39;CA&#39;</span><span class="p">,</span>
+    <span class="mi">715</span> <span class="o">:</span> <span class="s1">&#39;WI&#39;</span><span class="p">,</span>
+    <span class="mi">716</span> <span class="o">:</span> <span class="s1">&#39;NY&#39;</span><span class="p">,</span>
+    <span class="mi">717</span> <span class="o">:</span> <span class="s1">&#39;PA&#39;</span><span class="p">,</span>
+    <span class="mi">718</span> <span class="o">:</span> <span class="s1">&#39;NY&#39;</span><span class="p">,</span>
+    <span class="mi">719</span> <span class="o">:</span> <span class="s1">&#39;CO&#39;</span><span class="p">,</span>
+    <span class="mi">720</span> <span class="o">:</span> <span class="s1">&#39;CO&#39;</span><span class="p">,</span>
+    <span class="mi">724</span> <span class="o">:</span> <span class="s1">&#39;PA&#39;</span><span class="p">,</span>
+    <span class="mi">727</span> <span class="o">:</span> <span class="s1">&#39;FL&#39;</span><span class="p">,</span>
+    <span class="mi">731</span> <span class="o">:</span> <span class="s1">&#39;TN&#39;</span><span class="p">,</span>
+    <span class="mi">732</span> <span class="o">:</span> <span class="s1">&#39;NJ&#39;</span><span class="p">,</span>
+    <span class="mi">734</span> <span class="o">:</span> <span class="s1">&#39;MI&#39;</span><span class="p">,</span>
+    <span class="mi">740</span> <span class="o">:</span> <span class="s1">&#39;OH&#39;</span><span class="p">,</span>
+    <span class="mi">747</span> <span class="o">:</span> <span class="s1">&#39;CA&#39;</span><span class="p">,</span>
+    <span class="mi">754</span> <span class="o">:</span> <span class="s1">&#39;FL&#39;</span><span class="p">,</span>
+    <span class="mi">757</span> <span class="o">:</span> <span class="s1">&#39;VA&#39;</span><span class="p">,</span>
+    <span class="mi">760</span> <span class="o">:</span> <span class="s1">&#39;CA&#39;</span><span class="p">,</span>
+    <span class="mi">762</span> <span class="o">:</span> <span class="s1">&#39;GA&#39;</span><span class="p">,</span>
+    <span class="mi">763</span> <span class="o">:</span> <span class="s1">&#39;MN&#39;</span><span class="p">,</span>
+    <span class="mi">765</span> <span class="o">:</span> <span class="s1">&#39;IN&#39;</span><span class="p">,</span>
+    <span class="mi">769</span> <span class="o">:</span> <span class="s1">&#39;MS&#39;</span><span class="p">,</span>
+    <span class="mi">770</span> <span class="o">:</span> <span class="s1">&#39;GA&#39;</span><span class="p">,</span>
+    <span class="mi">772</span> <span class="o">:</span> <span class="s1">&#39;FL&#39;</span><span class="p">,</span>
+    <span class="mi">773</span> <span class="o">:</span> <span class="s1">&#39;IL&#39;</span><span class="p">,</span>
+    <span class="mi">774</span> <span class="o">:</span> <span class="s1">&#39;MA&#39;</span><span class="p">,</span>
+    <span class="mi">775</span> <span class="o">:</span> <span class="s1">&#39;NV&#39;</span><span class="p">,</span>
+    <span class="mi">779</span> <span class="o">:</span> <span class="s1">&#39;IL&#39;</span><span class="p">,</span>
+    <span class="mi">781</span> <span class="o">:</span> <span class="s1">&#39;MA&#39;</span><span class="p">,</span>
+    <span class="mi">785</span> <span class="o">:</span> <span class="s1">&#39;KS&#39;</span><span class="p">,</span>
+    <span class="mi">786</span> <span class="o">:</span> <span class="s1">&#39;FL&#39;</span><span class="p">,</span>
+    <span class="mi">787</span> <span class="o">:</span> <span class="s1">&#39;PR&#39;</span><span class="p">,</span>
+    <span class="mi">801</span> <span class="o">:</span> <span class="s1">&#39;UT&#39;</span><span class="p">,</span>
+    <span class="mi">802</span> <span class="o">:</span> <span class="s1">&#39;VT&#39;</span><span class="p">,</span>
+    <span class="mi">803</span> <span class="o">:</span> <span class="s1">&#39;SC&#39;</span><span class="p">,</span>
+    <span class="mi">804</span> <span class="o">:</span> <span class="s1">&#39;VA&#39;</span><span class="p">,</span>
+    <span class="mi">805</span> <span class="o">:</span> <span class="s1">&#39;CA&#39;</span><span class="p">,</span>
+    <span class="mi">806</span> <span class="o">:</span> <span class="s1">&#39;TX&#39;</span><span class="p">,</span>
+    <span class="mi">808</span> <span class="o">:</span> <span class="s1">&#39;HI&#39;</span><span class="p">,</span>
+    <span class="mi">810</span> <span class="o">:</span> <span class="s1">&#39;MI&#39;</span><span class="p">,</span>
+    <span class="mi">812</span> <span class="o">:</span> <span class="s1">&#39;IN&#39;</span><span class="p">,</span>
+    <span class="mi">813</span> <span class="o">:</span> <span class="s1">&#39;FL&#39;</span><span class="p">,</span>
+    <span class="mi">814</span> <span class="o">:</span> <span class="s1">&#39;PA&#39;</span><span class="p">,</span>
+    <span class="mi">815</span> <span class="o">:</span> <span class="s1">&#39;IL&#39;</span><span class="p">,</span>
+    <span class="mi">816</span> <span class="o">:</span> <span class="s1">&#39;MO&#39;</span><span class="p">,</span>
+    <span class="mi">817</span> <span class="o">:</span> <span class="s1">&#39;TX&#39;</span><span class="p">,</span>
+    <span class="mi">818</span> <span class="o">:</span> <span class="s1">&#39;CA&#39;</span><span class="p">,</span>
+    <span class="mi">828</span> <span class="o">:</span> <span class="s1">&#39;NC&#39;</span><span class="p">,</span>
+    <span class="mi">830</span> <span class="o">:</span> <span class="s1">&#39;TX&#39;</span><span class="p">,</span>
+    <span class="mi">831</span> <span class="o">:</span> <span class="s1">&#39;CA&#39;</span><span class="p">,</span>
+    <span class="mi">832</span> <span class="o">:</span> <span class="s1">&#39;TX&#39;</span><span class="p">,</span>
+    <span class="mi">843</span> <span class="o">:</span> <span class="s1">&#39;SC&#39;</span><span class="p">,</span>
+    <span class="mi">845</span> <span class="o">:</span> <span class="s1">&#39;NY&#39;</span><span class="p">,</span>
+    <span class="mi">847</span> <span class="o">:</span> <span class="s1">&#39;IL&#39;</span><span class="p">,</span>
+    <span class="mi">848</span> <span class="o">:</span> <span class="s1">&#39;NJ&#39;</span><span class="p">,</span>
+    <span class="mi">850</span> <span class="o">:</span> <span class="s1">&#39;FL&#39;</span><span class="p">,</span>
+    <span class="mi">856</span> <span class="o">:</span> <span class="s1">&#39;NJ&#39;</span><span class="p">,</span>
+    <span class="mi">857</span> <span class="o">:</span> <span class="s1">&#39;MA&#39;</span><span class="p">,</span>
+    <span class="mi">858</span> <span class="o">:</span> <span class="s1">&#39;CA&#39;</span><span class="p">,</span>
+    <span class="mi">859</span> <span class="o">:</span> <span class="s1">&#39;KY&#39;</span><span class="p">,</span>
+    <span class="mi">860</span> <span class="o">:</span> <span class="s1">&#39;CT&#39;</span><span class="p">,</span>
+    <span class="mi">862</span> <span class="o">:</span> <span class="s1">&#39;NJ&#39;</span><span class="p">,</span>
+    <span class="mi">863</span> <span class="o">:</span> <span class="s1">&#39;FL&#39;</span><span class="p">,</span>
+    <span class="mi">864</span> <span class="o">:</span> <span class="s1">&#39;SC&#39;</span><span class="p">,</span>
+    <span class="mi">865</span> <span class="o">:</span> <span class="s1">&#39;TN&#39;</span><span class="p">,</span>
+    <span class="mi">870</span> <span class="o">:</span> <span class="s1">&#39;AR&#39;</span><span class="p">,</span>
+    <span class="mi">872</span> <span class="o">:</span> <span class="s1">&#39;IL&#39;</span><span class="p">,</span>
+    <span class="mi">878</span> <span class="o">:</span> <span class="s1">&#39;PA&#39;</span><span class="p">,</span>
+    <span class="mi">901</span> <span class="o">:</span> <span class="s1">&#39;TN&#39;</span><span class="p">,</span>
+    <span class="mi">903</span> <span class="o">:</span> <span class="s1">&#39;TX&#39;</span><span class="p">,</span>
+    <span class="mi">904</span> <span class="o">:</span> <span class="s1">&#39;FL&#39;</span><span class="p">,</span>
+    <span class="mi">906</span> <span class="o">:</span> <span class="s1">&#39;MI&#39;</span><span class="p">,</span>
+    <span class="mi">907</span> <span class="o">:</span> <span class="s1">&#39;AK&#39;</span><span class="p">,</span>
+    <span class="mi">908</span> <span class="o">:</span> <span class="s1">&#39;NJ&#39;</span><span class="p">,</span>
+    <span class="mi">909</span> <span class="o">:</span> <span class="s1">&#39;CA&#39;</span><span class="p">,</span>
+    <span class="mi">910</span> <span class="o">:</span> <span class="s1">&#39;NC&#39;</span><span class="p">,</span>
+    <span class="mi">912</span> <span class="o">:</span> <span class="s1">&#39;GA&#39;</span><span class="p">,</span>
+    <span class="mi">913</span> <span class="o">:</span> <span class="s1">&#39;KS&#39;</span><span class="p">,</span>
+    <span class="mi">914</span> <span class="o">:</span> <span class="s1">&#39;NY&#39;</span><span class="p">,</span>
+    <span class="mi">915</span> <span class="o">:</span> <span class="s1">&#39;TX&#39;</span><span class="p">,</span>
+    <span class="mi">916</span> <span class="o">:</span> <span class="s1">&#39;CA&#39;</span><span class="p">,</span>
+    <span class="mi">917</span> <span class="o">:</span> <span class="s1">&#39;NY&#39;</span><span class="p">,</span>
+    <span class="mi">918</span> <span class="o">:</span> <span class="s1">&#39;OK&#39;</span><span class="p">,</span>
+    <span class="mi">919</span> <span class="o">:</span> <span class="s1">&#39;NC&#39;</span><span class="p">,</span>
+    <span class="mi">920</span> <span class="o">:</span> <span class="s1">&#39;WI&#39;</span><span class="p">,</span>
+    <span class="mi">925</span> <span class="o">:</span> <span class="s1">&#39;CA&#39;</span><span class="p">,</span>
+    <span class="mi">928</span> <span class="o">:</span> <span class="s1">&#39;AZ&#39;</span><span class="p">,</span>
+    <span class="mi">929</span> <span class="o">:</span> <span class="s1">&#39;NY&#39;</span><span class="p">,</span>
+    <span class="mi">931</span> <span class="o">:</span> <span class="s1">&#39;TN&#39;</span><span class="p">,</span>
+    <span class="mi">936</span> <span class="o">:</span> <span class="s1">&#39;TX&#39;</span><span class="p">,</span>
+    <span class="mi">937</span> <span class="o">:</span> <span class="s1">&#39;OH&#39;</span><span class="p">,</span>
+    <span class="mi">938</span> <span class="o">:</span> <span class="s1">&#39;AL&#39;</span><span class="p">,</span>
+    <span class="mi">939</span> <span class="o">:</span> <span class="s1">&#39;PR&#39;</span><span class="p">,</span>
+    <span class="mi">940</span> <span class="o">:</span> <span class="s1">&#39;TX&#39;</span><span class="p">,</span>
+    <span class="mi">941</span> <span class="o">:</span> <span class="s1">&#39;FL&#39;</span><span class="p">,</span>
+    <span class="mi">947</span> <span class="o">:</span> <span class="s1">&#39;MI&#39;</span><span class="p">,</span>
+    <span class="mi">949</span> <span class="o">:</span> <span class="s1">&#39;CA&#39;</span><span class="p">,</span>
+    <span class="mi">951</span> <span class="o">:</span> <span class="s1">&#39;CA&#39;</span><span class="p">,</span>
+    <span class="mi">952</span> <span class="o">:</span> <span class="s1">&#39;MN&#39;</span><span class="p">,</span>
+    <span class="mi">954</span> <span class="o">:</span> <span class="s1">&#39;FL&#39;</span><span class="p">,</span>
+    <span class="mi">956</span> <span class="o">:</span> <span class="s1">&#39;TX&#39;</span><span class="p">,</span>
+    <span class="mi">970</span> <span class="o">:</span> <span class="s1">&#39;CO&#39;</span><span class="p">,</span>
+    <span class="mi">971</span> <span class="o">:</span> <span class="s1">&#39;OR&#39;</span><span class="p">,</span>
+    <span class="mi">972</span> <span class="o">:</span> <span class="s1">&#39;TX&#39;</span><span class="p">,</span>
+    <span class="mi">973</span> <span class="o">:</span> <span class="s1">&#39;NJ&#39;</span><span class="p">,</span>
+    <span class="mi">978</span> <span class="o">:</span> <span class="s1">&#39;MA&#39;</span><span class="p">,</span>
+    <span class="mi">979</span> <span class="o">:</span> <span class="s1">&#39;TX&#39;</span><span class="p">,</span>
+    <span class="mi">980</span> <span class="o">:</span> <span class="s1">&#39;NC&#39;</span><span class="p">,</span>
+    <span class="mi">984</span> <span class="o">:</span> <span class="s1">&#39;NC&#39;</span><span class="p">,</span>
+    <span class="mi">985</span> <span class="o">:</span> <span class="s1">&#39;LA&#39;</span><span class="p">,</span>
+    <span class="mi">989</span> <span class="o">:</span> <span class="s1">&#39;MI&#39;</span>
+    <span class="p">};</span>
+
+    <span class="k">return</span> <span class="p">(</span><span class="nx">NPA_state</span><span class="p">[</span><span class="nx">area_code</span><span class="p">]</span> <span class="o">===</span> <span class="kc">undefined</span><span class="p">)</span> <span class="o">?</span> <span class="kc">false</span> <span class="o">:</span> <span class="nx">NPA_state</span><span class="p">[</span><span class="nx">area_code</span><span class="p">];</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">formatPhone</span><span class="p">(</span><span class="nx">phone</span><span class="p">,</span> <span class="nx">format</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">format</span> <span class="o">=</span> <span class="nx">format</span> <span class="o">||</span> <span class="s1">&#39;aaa-bbb-cccc&#39;</span><span class="p">;</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>handle null values, assign defaults</p></div></div><div class="code"><div class="wrapper">    <span class="nx">options</span> <span class="o">=</span> <span class="nx">options</span> <span class="o">||</span> <span class="p">{</span><span class="nx">decodeVanity</span><span class="o">:</span><span class="kc">false</span><span class="p">};</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">phone</span> <span class="o">!==</span> <span class="s1">&#39;string&#39;</span> <span class="o">||</span> <span class="nx">phone</span><span class="p">.</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s2">&quot;formatPhone expects argument &#39;phone&#39; as string!&quot;</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">format</span> <span class="o">!==</span> <span class="s1">&#39;string&#39;</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s2">&quot;formatPhone expects argument &#39;format&#39; as string or undefined!&quot;</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">format</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="sr">/[+i1]*?.*[a]{0,3}.*[b]{3}.*[c]{4}/i</span><span class="p">))</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s2">&quot;formatPhone was passed an invalid &#39;format&#39; argument; see documentation.&quot;</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kd">var</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">decodeVanity</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">phone</span> <span class="o">=</span> <span class="nx">decodeVanity</span><span class="p">(</span><span class="nx">phone</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="nx">phone</span> <span class="o">=</span> <span class="nx">phone</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/[^a-z\d]/gi</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">);</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>remove non-alphanumeric characters and underscores</p></div></div><div class="code"><div class="wrapper">    <span class="k">if</span> <span class="p">(</span><span class="nx">phone</span><span class="p">.</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">11</span><span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>remove country code to separate digit groups</p></div></div><div class="code"><div class="wrapper">        <span class="nx">phone</span> <span class="o">=</span> <span class="nx">phone</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nx">phone</span><span class="p">.</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">10</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">a</span> <span class="o">=</span> <span class="nx">phone</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">);</span>
+        <span class="nx">phone</span> <span class="o">=</span> <span class="nx">phone</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nx">phone</span><span class="p">.</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">7</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">b</span> <span class="o">=</span> <span class="nx">phone</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">);</span>
+        <span class="nx">c</span> <span class="o">=</span> <span class="nx">phone</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">7</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="nx">format</span>
+        <span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/i/i</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">)</span>
+        <span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/a{3}/i</span><span class="p">,</span> <span class="nx">a</span><span class="p">)</span>
+        <span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/b{3}/i</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span>
+        <span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/c{4}/i</span><span class="p">,</span> <span class="nx">c</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">decodeVanity</span><span class="p">(</span><span class="nx">phone</span><span class="p">,</span> <span class="nx">format</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">phone</span> <span class="o">!==</span> <span class="s1">&#39;string&#39;</span> <span class="o">||</span> <span class="nx">phone</span> <span class="o">===</span> <span class="kc">undefined</span> <span class="o">||</span> <span class="nx">phone</span><span class="p">.</span><span class="nx">length</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s2">&quot;decodeVanity expects argument &#39;phone&#39; as string!&quot;</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="nx">phone</span> <span class="o">=</span> <span class="nx">phone</span>
+        <span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/[abc]/gi</span><span class="p">,</span>  <span class="s1">&#39;2&#39;</span><span class="p">)</span>
+        <span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/[def]/gi</span><span class="p">,</span>  <span class="s1">&#39;3&#39;</span><span class="p">)</span>
+        <span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/[ghi]/gi</span><span class="p">,</span>  <span class="s1">&#39;4&#39;</span><span class="p">)</span>
+        <span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/[jkl]/gi</span><span class="p">,</span>  <span class="s1">&#39;5&#39;</span><span class="p">)</span>
+        <span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/[mno]/gi</span><span class="p">,</span>  <span class="s1">&#39;6&#39;</span><span class="p">)</span>
+        <span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/[pqrs]/gi</span><span class="p">,</span> <span class="s1">&#39;7&#39;</span><span class="p">)</span>
+        <span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/[tuv]/gi</span><span class="p">,</span>  <span class="s1">&#39;8&#39;</span><span class="p">)</span>
+        <span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/[wxyz]/gi</span><span class="p">,</span> <span class="s1">&#39;9&#39;</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="nx">formatPhone</span><span class="p">(</span><span class="nx">phone</span><span class="p">,</span> <span class="nx">format</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">validatePhone</span><span class="p">(</span><span class="nx">phone_number</span><span class="p">)</span> <span class="p">{</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>If the phone number is not valid:
+returns: an key/value pair of invalid parts of the phone number</p>
+
+<h2 id="example-if-the-area-code-123-is-invalid-wed-get-npa-123">example: If the area code (123) is invalid we'd get {NPA: 123}</h2>
+
+<p>If the phone number is valid:
+returns: true</p></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>Decode vanity numbers</p></div></div><div class="code"><div class="wrapper">    <span class="k">if</span> <span class="p">(</span><span class="nx">phone_number</span><span class="p">.</span><span class="nx">search</span><span class="p">(</span><span class="sr">/[A-Z]/i</span><span class="p">)</span> <span class="o">!==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">phone_number</span> <span class="o">=</span> <span class="nx">decodeVanity</span><span class="p">(</span><span class="nx">phone_number</span><span class="p">);</span>
+    <span class="p">}</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>Exit early on numbers that failed parsing</p></div></div><div class="code"><div class="wrapper">    <span class="nx">phone_number</span> <span class="o">=</span> <span class="nx">formatPhone</span><span class="p">(</span><span class="nx">phone_number</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">phone_number</span><span class="p">.</span><span class="nx">split</span> <span class="o">!==</span> <span class="s1">&#39;function&#39;</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+    <span class="p">}</span></div></div></div><div class="segment"><div class="comments"><div class="wrapper"><p>Split number into NPA, NXX, Subscriber</p></div></div><div class="code"><div class="wrapper">    <span class="nx">phone_number</span> <span class="o">=</span> <span class="nx">phone_number</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">);</span>
+
+    <span class="kd">var</span> <span class="nx">return_val</span> <span class="o">=</span> <span class="p">{},</span> <span class="nx">valid</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nx">isNPA</span><span class="p">(</span><span class="nx">phone_number</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">!==</span> <span class="kc">true</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">return_val</span><span class="p">.</span><span class="nx">NPA</span> <span class="o">=</span> <span class="nx">phone_number</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+        <span class="nx">valid</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nx">isNXX</span><span class="p">(</span><span class="nx">phone_number</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">!==</span> <span class="kc">true</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">return_val</span><span class="p">.</span><span class="nx">NXX</span> <span class="o">=</span> <span class="nx">phone_number</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+        <span class="nx">valid</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nx">isSubscriber</span><span class="p">(</span><span class="nx">phone_number</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">!==</span> <span class="kc">true</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">return_val</span><span class="p">.</span><span class="nx">subscriber</span> <span class="o">=</span> <span class="nx">phone_number</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+        <span class="nx">valid</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="p">(</span><span class="nx">valid</span><span class="p">)</span> <span class="o">?</span> <span class="kc">true</span> <span class="o">:</span> <span class="nx">return_val</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">formatPhone</span> <span class="o">:</span> <span class="nx">formatPhone</span><span class="p">,</span>
+    <span class="nx">validatePhone</span> <span class="o">:</span> <span class="nx">validatePhone</span><span class="p">,</span>
+    <span class="nx">decodeVanity</span> <span class="o">:</span> <span class="nx">decodeVanity</span><span class="p">,</span>
+    <span class="nx">NPAtoState</span> <span class="o">:</span> <span class="nx">NPAtoState</span><span class="p">,</span>
+    <span class="nx">isNPA</span> <span class="o">:</span> <span class="nx">isNPA</span><span class="p">,</span>
+    <span class="nx">isNXX</span> <span class="o">:</span> <span class="nx">isNXX</span><span class="p">,</span>
+    <span class="nx">isSubscriber</span> <span class="o">:</span> <span class="nx">isSubscriber</span>
+<span class="p">};</span></div></div></div></div></body></html>
