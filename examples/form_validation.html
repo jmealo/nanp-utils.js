@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <title>nanp-utils - Form Validation Example</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+    <script src='../lib/nanp-utils.js'></script>
+</head>
+<script>
+    $(window).load(function () {
+        $('#phone').keyup(function (event) {
+            var validatedPhone = nanp.validatePhone(this.value);
+            //check if phone number is valid
+
+            if (validatedPhone.isValid === true) {
+                $('#checkmark').css({'color':'green'});
+                this.value = nanp.formatPhone(this.value, '(aaa) bbb-cccc');
+                //set input field to phone number in (xxx) xxx-xxx format
+
+                var state = nanp.NPAtoState(this.value.substr(1, 3));
+                //check if the phone number corresponds to a state
+
+                if (state.length === 2) {
+                    $('#hint')
+                            .show()
+                            .css({'color':'black'})
+                            .text('A valid phone number based in: ' + state + ' was entered!');
+                } else {
+                    $('#hint').hide();
+                }
+
+            } else {
+                //clear any previous hints
+                $('#checkmark').css({'color':'red'});
+                $('#hint').hide();
+            }
+            for (var part in validatedPhone) {
+                //Loop through each part of hte phone number, update the bullets in the "Debug:" list
+                var result = validatedPhone[part];
+                $('#' + part).text(((result[0] === true) ? 'Valid' : 'Invalid') + ' (' + result[1] + ')');
+            }
+        });
+
+        $('#submit').click(function (event) {
+            var validatedPhone = nanp.validatePhone($('#phone').val());
+
+            if (validatedPhone.isValid === false) {
+                //phone number isn't valid
+
+                var friendlyParts = {
+                    NPA:'Area Code',
+                    NXX:'Exchange',
+                    subscriber:'Last 4 Digits'
+                };
+                //"end user readable" names for the parts of the phone number
+
+                var hintText = 'Please double check your: ';
+                var invalidParts = [];
+
+                for (var part in validatedPhone) {
+                    var result = validatedPhone[part];
+                    if (result[0] === false) {
+                        invalidParts.push(friendlyParts[part]);
+                    }
+                }
+
+                hintText += invalidParts.join(', ');
+                //make a comma seperated list of parts of the phone number that failed to validate
+
+                $('#hint').show().css({'color':'red'}).text(hintText);
+            } else {
+                $('#hint').hide();
+                //hide hint if valid
+            }
+        });
+
+        $('#submit2').click(function (event) {
+            var validatedPhone = nanp.validatePhone($('#phone').val());
+            //phone number isn't valid
+
+            var hintText = 'Invalid Phone Number: ' + $('#phone').val();
+
+            if (validatedPhone.isValid === false) {
+                for (var part in validatedPhone) {
+                    var result = validatedPhone[part];
+                    if (result[0] === false) {
+                        hintText = hintText.replace(RegExp(result[1]), '<b>' + result[1] + '</b>');
+                    }
+                }
+                $('#hint').show().css({'color':'red'}).html(hintText);
+                //make the invalid parts of the phone number bold from left to right, if the sequence of invalid
+                //numbers appears twice, only the first will be bolded
+
+            } else {
+                $('#hint').hide();
+                //hide hint if valid
+            }
+        });
+    });
+</script>
+<body>
+<input type="text" name="phone" id="phone" maxlength="15">
+<span id="checkmark" style="color: red"> &#10003;</span>
+<input type="button" name="submit" id="submit" value="On-Submit (Style #2)">
+<input type="button" name="submit2"id="submit2" value="On-Submit (Style #2)"><br>
+
+<span id="hint" style="color: red; font-size: small"></span>
+<h4>Debug:</h4>
+<ul id="parts">
+    <li>NPA:<br><span id="NPA">Invalid ()</span></li>
+    <li>NXX:<br><span id="NXX">Invalid ()</span></li>
+    <li>Subscriber:<br><span id="subscriber">Invalid ()</span></li>
+</ul>
+</body>
+</html>
+
